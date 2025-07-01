@@ -4,7 +4,7 @@ require_relative '../extensions/uri'
 
 require 'nokogiri'
 
-module Spidr
+module SpidrHttpx
   class Page
     include Enumerable
 
@@ -38,15 +38,15 @@ module Spidr
     def each_meta_redirect
       return enum_for(__method__) unless block_given?
 
-      if (html? && doc)
-        search('//meta[@http-equiv and @content]').each do |node|
-          if node.get_attribute('http-equiv') =~ /refresh/i
-            content = node.get_attribute('content')
+      return unless html? && doc
 
-            if (redirect = content.match(/url=(\S+)$/))
-              yield redirect[1]
-            end
-          end
+      search('//meta[@http-equiv and @content]').each do |node|
+        next unless node.get_attribute('http-equiv') =~ /refresh/i
+
+        content = node.get_attribute('content')
+
+        if (redirect = content.match(/url=(\S+)$/))
+          yield redirect[1]
         end
       end
     end
@@ -85,8 +85,8 @@ module Spidr
     #   Use {#meta_redirects} instead.
     #
     def meta_redirect
-      warn 'DEPRECATION: Spidr::Page#meta_redirect will be removed in 0.3.0'
-      warn 'DEPRECATION: Use Spidr::Page#meta_redirects instead'
+      warn 'DEPRECATION: SpidrHttpx::Page#meta_redirect will be removed in 0.3.0'
+      warn 'DEPRECATION: Use SpidrHttpx::Page#meta_redirects instead'
 
       meta_redirects
     end
@@ -110,12 +110,12 @@ module Spidr
 
       locations = @response.get_fields('Location')
 
-      unless (locations.nil? || locations.empty?)
-        # Location headers override any meta-refresh redirects in the HTML
-        locations.each(&block)
-      else
+      if locations.nil? || locations.empty?
         # check page-level meta redirects if there isn't a location header
         each_meta_redirect(&block)
+      else
+        # Location headers override any meta-refresh redirects in the HTML
+        locations.each(&block)
       end
     end
 
@@ -147,10 +147,10 @@ module Spidr
     def each_mailto
       return enum_for(__method__) unless block_given?
 
-      if (html? && doc)
-        doc.search('//a[starts-with(@href,"mailto:")]').each do |a|
-          yield a.get_attribute('href')[7..-1]
-        end
+      return unless html? && doc
+
+      doc.search('//a[starts-with(@href,"mailto:")]').each do |a|
+        yield a.get_attribute('href')[7..-1]
       end
     end
 
@@ -185,26 +185,26 @@ module Spidr
 
       each_redirect(&block) if is_redirect?
 
-      if (html? && doc)
-        doc.search('//a[@href[string()]]').each do |a|
-          yield a.get_attribute('href')
-        end
+      return unless html? && doc
 
-        doc.search('//frame[@src[string()]]').each do |iframe|
-          yield iframe.get_attribute('src')
-        end
+      doc.search('//a[@href[string()]]').each do |a|
+        yield a.get_attribute('href')
+      end
 
-        doc.search('//iframe[@src[string()]]').each do |iframe|
-          yield iframe.get_attribute('src')
-        end
+      doc.search('//frame[@src[string()]]').each do |iframe|
+        yield iframe.get_attribute('src')
+      end
 
-        doc.search('//link[@href[string()]]').each do |link|
-          yield link.get_attribute('href')
-        end
+      doc.search('//iframe[@src[string()]]').each do |iframe|
+        yield iframe.get_attribute('src')
+      end
 
-        doc.search('//script[@src[string()]]').each do |script|
-          yield script.get_attribute('src')
-        end
+      doc.search('//link[@href[string()]]').each do |link|
+        yield link.get_attribute('href')
+      end
+
+      doc.search('//script[@src[string()]]').each do |script|
+        yield script.get_attribute('src')
       end
     end
 
@@ -267,16 +267,14 @@ module Spidr
     def to_absolute(link)
       link    = link.to_s
       new_url = begin
-                  url.merge(link)
-                rescue URI::Error
-                  return
-                end
+        url.merge(link)
+      rescue URI::Error
+        return
+      end
 
-      if (!new_url.opaque) && (path = new_url.path)
+      if !new_url.opaque && (path = new_url.path)
         # ensure that paths begin with a leading '/' for URI::FTP
-        if (new_url.scheme == 'ftp' && !path.start_with?('/'))
-          path.insert(0,'/')
-        end
+        path.insert(0, '/') if new_url.scheme == 'ftp' && !path.start_with?('/')
 
         # make sure the path does not contain any .. or . directories,
         # since URI::Generic#merge cannot normalize paths such as
@@ -284,7 +282,7 @@ module Spidr
         new_url.path = URI.expand_path(path)
       end
 
-      return new_url
+      new_url
     end
   end
 end

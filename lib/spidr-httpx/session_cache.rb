@@ -2,17 +2,16 @@
 
 require_relative 'settings/proxy'
 require_relative 'settings/timeouts'
-require_relative 'spidr'
+require_relative 'spidr-httpx'
 
 require 'net/http'
 require 'openssl'
 
-module Spidr
+module SpidrHttpx
   #
   # Stores active HTTP Sessions organized by scheme, host-name and port.
   #
   class SessionCache
-
     include Settings::Proxy
     include Settings::Timeouts
 
@@ -39,12 +38,12 @@ module Spidr
     #
     # @since 0.6.0
     #
-    def initialize(proxy:              Spidr.proxy,
-                   open_timeout:       Spidr.open_timeout,
-                   ssl_timeout:        Spidr.ssl_timeout,
-                   read_timeout:       Spidr.read_timeout,
-                   continue_timeout:   Spidr.continue_timeout,
-                   keep_alive_timeout: Spidr.keep_alive_timeout)
+    def initialize(proxy:              SpidrHttpx.proxy,
+                   open_timeout:       SpidrHttpx.open_timeout,
+                   ssl_timeout:        SpidrHttpx.ssl_timeout,
+                   read_timeout:       SpidrHttpx.read_timeout,
+                   continue_timeout:   SpidrHttpx.continue_timeout,
+                   keep_alive_timeout: SpidrHttpx.keep_alive_timeout)
       self.proxy = proxy
 
       self.open_timeout       = open_timeout
@@ -74,7 +73,7 @@ module Spidr
       # session key
       key = key_for(url)
 
-      return @sessions.has_key?(key)
+      @sessions.has_key?(key)
     end
 
     #
@@ -99,7 +98,7 @@ module Spidr
           @proxy.port,
           @proxy.user,
           @proxy.password
-        ).new(url.host,url.port)
+        ).new(url.host, url.port)
 
         session.open_timeout       = @open_timeout       if @open_timeout
         session.read_timeout       = @read_timeout       if @read_timeout
@@ -116,7 +115,7 @@ module Spidr
         @sessions[key] = session
       end
 
-      return @sessions[key]
+      @sessions[key]
     end
 
     #
@@ -156,14 +155,12 @@ module Spidr
     #
     def clear
       @sessions.each_value do |session|
-        begin
-          session.finish
-        rescue IOError
-        end
+        session.finish
+      rescue IOError
       end
 
       @sessions.clear
-      return self
+      self
     end
 
     private
@@ -180,6 +177,5 @@ module Spidr
     def key_for(url)
       [url.scheme, url.host, url.port]
     end
-
   end
 end

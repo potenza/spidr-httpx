@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Spidr
+module SpidrHttpx
   class Page
     #
     # The Content-Type of the page.
@@ -34,18 +34,16 @@ module Spidr
     #
     def content_charset
       content_types.each do |value|
-        if value.include?(';')
-          value.split(';').each do |param|
-            param.strip!
+        next unless value.include?(';')
 
-            if param.start_with?('charset=')
-              return param.split('=',2).last
-            end
-          end
+        value.split(';').each do |param|
+          param.strip!
+
+          return param.split('=', 2).last if param.start_with?('charset=')
         end
       end
 
-      return nil
+      nil
     end
 
     #
@@ -70,15 +68,15 @@ module Spidr
       if type.include?('/')
         # otherwise only match the first param
         content_types.any? do |value|
-          value = value.split(';',2).first
+          value = value.split(';', 2).first
 
           value == type
         end
       else
         # otherwise only match the sub-type
         content_types.any? do |value|
-          value = value.split(';',2).first
-          value = value.split('/',2).last
+          value = value.split(';', 2).first
+          value = value.split('/', 2).last
 
           value == type
         end

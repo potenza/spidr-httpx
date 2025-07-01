@@ -4,7 +4,7 @@ require_relative '../proxy'
 
 require 'uri/http'
 
-module Spidr
+module SpidrHttpx
   module Settings
     #
     # Methods for configuring a proxy.
@@ -15,17 +15,17 @@ module Spidr
       #
       # Proxy information used by all newly created Agent objects by default.
       #
-      # @return [Spidr::Proxy]
-      #   The Spidr proxy information.
+      # @return [SpidrHttpx::Proxy]
+      #   The SpidrHttpx proxy information.
       #
       def proxy
-        @proxy ||= Spidr::Proxy.new
+        @proxy ||= SpidrHttpx::Proxy.new
       end
 
       #
       # Sets the proxy information used by Agent objects.
       #
-      # @param [Spidr::Proxy, Hash, URI::HTTP, String, nil] new_proxy
+      # @param [SpidrHttpx::Proxy, Hash, URI::HTTP, String, nil] new_proxy
       #   The new proxy information.
       #
       # @option new_proxy [String] :host
@@ -40,28 +40,29 @@ module Spidr
       # @option new_proxy [String] :password
       #   The password to authenticate with the proxy.
       #
-      # @return [Spidr::Proxy]
+      # @return [SpidrHttpx::Proxy]
       #   The new proxy information.
       #
       def proxy=(new_proxy)
         @proxy = case new_proxy
-                 when Spidr::Proxy
+                 when SpidrHttpx::Proxy
                    new_proxy
                  when Hash
-                   Spidr::Proxy.new(**new_proxy)
+                   SpidrHttpx::Proxy.new(**new_proxy)
                  when String, URI::HTTP
                    proxy_uri = URI(new_proxy)
 
-                   Spidr::Proxy.new(
-                      host:     proxy_uri.host,
-                      port:     proxy_uri.port,
-                      user:     proxy_uri.user,
-                      password: proxy_uri.password
+                   SpidrHttpx::Proxy.new(
+                     host: proxy_uri.host,
+                     port: proxy_uri.port,
+                     user: proxy_uri.user,
+                     password: proxy_uri.password
                    )
                  when nil
-                   Spidr::Proxy.new
+                   SpidrHttpx::Proxy.new
                  else
-                   raise(TypeError,"#{self.class}#{__method__} only accepts Spidr::Proxy, URI::HTTP, Hash, or nil")
+                   raise(TypeError,
+                         "#{self.class}#{__method__} only accepts SpidrHttpx::Proxy, URI::HTTP, Hash, or nil")
                  end
       end
 
@@ -69,8 +70,8 @@ module Spidr
       # Disables the proxy settings used by all newly created Agent objects.
       #
       def disable_proxy!
-        @proxy = Spidr::Proxy.new
-        return true
+        @proxy = SpidrHttpx::Proxy.new
+        true
       end
     end
   end

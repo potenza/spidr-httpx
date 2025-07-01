@@ -10,14 +10,14 @@ require_relative 'page'
 require_relative 'session_cache'
 require_relative 'cookie_jar'
 require_relative 'auth_store'
-require_relative 'spidr'
+require_relative 'spidr-httpx'
 
 require 'openssl'
 require 'net/http'
 require 'httpx'
 require 'ostruct'
 
-module Spidr
+module SpidrHttpx
   class Agent
     include Settings::UserAgent
 
@@ -128,7 +128,7 @@ module Spidr
     # @param [Integer, nil] keep_alive_timeout
     #   Optional `Keep-Alive` timeout.
     #
-    # @param [Spidr::Proxy, Hash, URI::HTTP, String, nil] proxy
+    # @param [SpidrHttpx::Proxy, Hash, URI::HTTP, String, nil] proxy
     #   The proxy information to use.
     #
     # @option proxy [String] :host
@@ -215,15 +215,15 @@ module Spidr
       host_header: nil,
       host_headers:       {},
       default_headers:    {},
-      user_agent:         Spidr.user_agent,
+      user_agent:         SpidrHttpx.user_agent,
       referer:            nil,
       # session cache keyword arguments
-      proxy:              Spidr.proxy,
-      open_timeout:       Spidr.open_timeout,
-      ssl_timeout:        Spidr.ssl_timeout,
-      read_timeout:       Spidr.read_timeout,
-      continue_timeout:   Spidr.continue_timeout,
-      keep_alive_timeout: Spidr.keep_alive_timeout,
+      proxy:              SpidrHttpx.proxy,
+      open_timeout:       SpidrHttpx.open_timeout,
+      ssl_timeout:        SpidrHttpx.ssl_timeout,
+      read_timeout:       SpidrHttpx.read_timeout,
+      continue_timeout:   SpidrHttpx.continue_timeout,
+      keep_alive_timeout: SpidrHttpx.keep_alive_timeout,
       # spidering controls keyword arguments
       delay:     0,
       limit:     nil,
@@ -248,7 +248,7 @@ module Spidr
       exts:         nil,
       ignore_exts:  nil,
       # robots keyword arguments
-      robots:       Spidr.robots?
+      robots:       SpidrHttpx.robots?
     )
       @host_header  = host_header
       @host_headers = host_headers

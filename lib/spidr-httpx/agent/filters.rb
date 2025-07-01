@@ -2,9 +2,8 @@
 
 require_relative '../rules'
 
-module Spidr
+module SpidrHttpx
   class Agent
-
     # List of acceptable URL schemes to follow
     attr_reader :schemes
 
@@ -43,14 +42,14 @@ module Spidr
     # @yieldparam [String] host
     #   A host-name to accept or reject.
     #
-    def visit_hosts_like(pattern=nil,&block)
+    def visit_hosts_like(pattern = nil, &block)
       if pattern
         visit_hosts << pattern
       elsif block
         visit_hosts << block
       end
 
-      return self
+      self
     end
 
     #
@@ -75,14 +74,14 @@ module Spidr
     # @yieldparam [String] host
     #   A host-name to reject or accept.
     #
-    def ignore_hosts_like(pattern=nil,&block)
+    def ignore_hosts_like(pattern = nil, &block)
       if pattern
         ignore_hosts << pattern
       elsif block
         ignore_hosts << block
       end
 
-      return self
+      self
     end
 
     #
@@ -107,14 +106,14 @@ module Spidr
     # @yieldparam [Integer] port
     #   A port to accept or reject.
     #
-    def visit_ports_like(pattern=nil,&block)
+    def visit_ports_like(pattern = nil, &block)
       if pattern
         visit_ports << pattern
       elsif block
         visit_ports << block
       end
 
-      return self
+      self
     end
 
     #
@@ -139,14 +138,14 @@ module Spidr
     # @yieldparam [Integer] port
     #   A port to reject or accept.
     #
-    def ignore_ports_like(pattern=nil,&block)
+    def ignore_ports_like(pattern = nil, &block)
       if pattern
         ignore_ports << pattern
       elsif block
         ignore_ports << block
       end
 
-      return self
+      self
     end
 
     #
@@ -175,14 +174,14 @@ module Spidr
     #
     # @since 0.2.4
     #
-    def visit_links_like(pattern=nil,&block)
+    def visit_links_like(pattern = nil, &block)
       if pattern
         visit_links << pattern
       elsif block
         visit_links << block
       end
 
-      return self
+      self
     end
 
     #
@@ -207,14 +206,14 @@ module Spidr
     # @yieldparam [String] link
     #   A link to reject or accept.
     #
-    def ignore_links_like(pattern=nil,&block)
+    def ignore_links_like(pattern = nil, &block)
       if pattern
         ignore_links << pattern
       elsif block
         ignore_links << block
       end
 
-      return self
+      self
     end
 
     #
@@ -243,14 +242,14 @@ module Spidr
     #
     # @since 0.2.4
     #
-    def visit_urls_like(pattern=nil,&block)
+    def visit_urls_like(pattern = nil, &block)
       if pattern
         visit_urls << pattern
       elsif block
         visit_urls << block
       end
 
-      return self
+      self
     end
 
     #
@@ -279,14 +278,14 @@ module Spidr
     #
     # @since 0.2.4
     #
-    def ignore_urls_like(pattern=nil,&block)
+    def ignore_urls_like(pattern = nil, &block)
       if pattern
         ignore_urls << pattern
       elsif block
         ignore_urls << block
       end
 
-      return self
+      self
     end
 
     #
@@ -311,14 +310,14 @@ module Spidr
     # @yieldparam [String] ext
     #   A URI path extension to accept or reject.
     #
-    def visit_exts_like(pattern=nil,&block)
+    def visit_exts_like(pattern = nil, &block)
       if pattern
         visit_exts << pattern
       elsif block
         visit_exts << block
       end
 
-      return self
+      self
     end
 
     #
@@ -343,14 +342,14 @@ module Spidr
     # @yieldparam [String] ext
     #   A URI path extension to reject or accept.
     #
-    def ignore_exts_like(pattern=nil,&block)
+    def ignore_exts_like(pattern = nil, &block)
       if pattern
         ignore_exts << pattern
       elsif block
         ignore_exts << block
       end
 
-      return self
+      self
     end
 
     protected
@@ -439,7 +438,7 @@ module Spidr
         warn "Warning: cannot load 'net/https', https support disabled"
       end
 
-      return schemes
+      schemes
     end
 
     #
@@ -525,6 +524,5 @@ module Spidr
     def visit_ext?(path)
       @ext_rules.accept?(File.extname(path)[1..-1])
     end
-
   end
 end

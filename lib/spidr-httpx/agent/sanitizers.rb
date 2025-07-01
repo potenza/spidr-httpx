@@ -2,9 +2,8 @@
 
 require 'uri'
 
-module Spidr
+module SpidrHttpx
   class Agent
-
     # Specifies whether the Agent will strip URI fragments
     attr_accessor :strip_fragments
 
@@ -28,7 +27,7 @@ module Spidr
       url.fragment = nil if @strip_fragments
       url.query    = nil if @strip_query
 
-      return url
+      url
     end
 
     protected
@@ -48,6 +47,5 @@ module Spidr
       @strip_fragments = strip_fragments
       @strip_query     = strip_query
     end
-
   end
 end

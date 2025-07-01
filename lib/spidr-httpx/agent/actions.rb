@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Spidr
+module SpidrHttpx
   class Agent
     module Actions
       #
@@ -41,7 +41,7 @@ module Spidr
     #
     def continue!(&block)
       @paused = false
-      return run(&block)
+      run(&block)
     end
 
     #

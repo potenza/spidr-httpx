@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Spidr
+module SpidrHttpx
   module Settings
     #
     # @since 0.6.0
@@ -9,7 +9,7 @@ module Spidr
       # The User-Agent string used by all Agent objects by default.
       #
       # @return [String]
-      #   The Spidr User-Agent string.
+      #   The SpidrHttpx User-Agent string.
       attr_accessor :user_agent
     end
   end

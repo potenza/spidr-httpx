@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
-module Spidr
+module SpidrHttpx
   #
   # Represents a requested page from a website.
   #
   class Page
-
     # URL of the page
     attr_reader :url
 
@@ -24,7 +23,7 @@ module Spidr
     # @param [Net::HTTPResponse] response
     #   The response from the request for the page.
     #
-    def initialize(url,response)
+    def initialize(url, response)
       @url      = url
       @response = response
       @headers  = response.to_hash
@@ -38,7 +37,7 @@ module Spidr
     #   The body of the response.
     #
     def body
-      (response.body || '')
+      response.body || ''
     end
 
     alias to_s body
@@ -55,19 +54,19 @@ module Spidr
     # @see http://nokogiri.rubyforge.org/nokogiri/Nokogiri/HTML/Document.html
     #
     def doc
-      unless body.empty?
-        doc_class = if html?
-                      Nokogiri::HTML::Document
-                    elsif rss? || atom? || xml? || xsl?
-                      Nokogiri::XML::Document
-                    end
+      return if body.empty?
 
-        if doc_class
-          begin
-            @doc ||= doc_class.parse(body, @url.to_s, content_charset)
-          rescue
-          end
-        end
+      doc_class = if html?
+                    Nokogiri::HTML::Document
+                  elsif rss? || atom? || xml? || xsl?
+                    Nokogiri::XML::Document
+                  end
+
+      return unless doc_class
+
+      begin
+        @doc ||= doc_class.parse(body, @url.to_s, content_charset)
+      rescue StandardError
       end
     end
 
@@ -108,9 +107,9 @@ module Spidr
     # @see http://nokogiri.rubyforge.org/nokogiri/Nokogiri/XML/Node.html#M000251
     #
     def at(*arguments)
-      if doc
-        doc.at(*arguments)
-      end
+      return unless doc
+
+      doc.at(*arguments)
     end
 
     alias / search
@@ -133,22 +132,19 @@ module Spidr
     # @raise [NoMethodError]
     #   The missing method did not map to a header in {#headers}.
     #
-    def method_missing(name,*arguments,&block)
-      if (arguments.empty? && block.nil?)
-        header_name = name.to_s.tr('_','-')
+    def method_missing(name, *arguments, &block)
+      if arguments.empty? && block.nil?
+        header_name = name.to_s.tr('_', '-')
 
-        if @response.key?(header_name)
-          return @response[header_name]
-        end
+        return @response[header_name] if @response.key?(header_name)
       end
 
-      return super(name,*arguments,&block)
+      super(name, *arguments, &block)
     end
-
   end
 end
 
-require 'spidr/page/status_codes'
-require 'spidr/page/content_types'
-require 'spidr/page/cookies'
-require 'spidr/page/html'
+require 'spidr-httpx/page/status_codes'
+require 'spidr-httpx/page/content_types'
+require 'spidr-httpx/page/cookies'
+require 'spidr-httpx/page/html'

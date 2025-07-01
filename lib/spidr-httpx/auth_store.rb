@@ -6,13 +6,12 @@ require_relative 'page'
 
 require 'base64'
 
-module Spidr
+module SpidrHttpx
   #
   # Stores {AuthCredential} objects organized by a website's scheme,
   # host-name and sub-directory.
   #
   class AuthStore
-
     #
     # Creates a new auth store.
     #
@@ -50,10 +49,10 @@ module Spidr
       path_dirs = URI.expand_path(url.path).split('/')
 
       ordered_paths.each do |path|
-        return paths[path] if path_dirs[0,path.length] == path
+        return paths[path] if path_dirs[0, path.length] == path
       end
 
-      return nil
+      nil
     end
 
     #
@@ -70,7 +69,7 @@ module Spidr
     #
     # @since 0.2.2
     #
-    def []=(url,auth)
+    def []=(url, auth)
       # normalize the url
       url = URI(url)
 
@@ -81,7 +80,7 @@ module Spidr
 
       @credentials[key] ||= {}
       @credentials[key][path.split('/')] = auth
-      return auth
+      auth
     end
 
     #
@@ -102,8 +101,8 @@ module Spidr
     #
     # @since 0.2.2
     #
-    def add(url,username,password)
-      self[url] = AuthCredential.new(username,password)
+    def add(url, username, password)
+      self[url] = AuthCredential.new(username, password)
     end
 
     #
@@ -134,7 +133,7 @@ module Spidr
     #
     def clear!
       @credentials.clear
-      return self
+      self
     end
 
     #
@@ -150,7 +149,7 @@ module Spidr
 
       @credentials.each_value { |paths| total += paths.length }
 
-      return total
+      total
     end
 
     #
@@ -162,6 +161,5 @@ module Spidr
     def inspect
       "#<#{self.class}: #{@credentials.inspect}>"
     end
-
   end
 end

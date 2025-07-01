@@ -5,7 +5,7 @@ require_relative 'settings/timeouts'
 require_relative 'settings/user_agent'
 require_relative 'agent'
 
-module Spidr
+module SpidrHttpx
   extend Settings::Proxy
   extend Settings::Timeouts
   extend Settings::UserAgent
@@ -38,15 +38,15 @@ module Spidr
   #
   # @see Agent.start_at
   #
-  def self.start_at(url,**kwargs,&block)
-    Agent.start_at(url,**kwargs,&block)
+  def self.start_at(url, **kwargs, &block)
+    Agent.start_at(url, **kwargs, &block)
   end
 
   #
   # @see Agent.host
   #
-  def self.host(name,**kwargs,&block)
-    Agent.host(name,**kwargs,&block)
+  def self.host(name, **kwargs, &block)
+    Agent.host(name, **kwargs, &block)
   end
 
   #
@@ -54,15 +54,15 @@ module Spidr
   #
   # @since 0.7.0
   #
-  def self.domain(name,**kwargs,&block)
-    Agent.domain(name,**kwargs,&block)
+  def self.domain(name, **kwargs, &block)
+    Agent.domain(name, **kwargs, &block)
   end
 
   #
   # @see Agent.site
   #
-  def self.site(url,**kwargs,&block)
-    Agent.site(url,**kwargs,&block)
+  def self.site(url, **kwargs, &block)
+    Agent.site(url, **kwargs, &block)
   end
 
   #

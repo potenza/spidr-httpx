@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Spidr
+module SpidrHttpx
   class Page
     #
     # The response code from the page.

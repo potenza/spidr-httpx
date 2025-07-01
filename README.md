@@ -1,11 +1,11 @@
-# Spidr
+# SpidrHttpx
 
 [![CI](https://github.com/postmodern/spidr/actions/workflows/ruby.yml/badge.svg)](https://github.com/postmodern/spidr/actions/workflows/ruby.yml)
 
-* [Homepage](https://github.com/postmodern/spidr#readme)
-* [Source](https://github.com/postmodern/spidr)
-* [Issues](https://github.com/postmodern/spidr/issues)
-* [Mailing List](http://groups.google.com/group/spidr)
+- [Homepage](https://github.com/postmodern/spidr#readme)
+- [Source](https://github.com/postmodern/spidr)
+- [Issues](https://github.com/postmodern/spidr/issues)
+- [Mailing List](http://groups.google.com/group/spidr)
 
 ## Description
 
@@ -15,35 +15,35 @@ and easy to use.
 
 ## Features
 
-* Follows:
-  * `a` tags.
-  * `iframe` tags.
-  * `frame` tags.
-  * Cookie protected links.
-  * HTTP 300, 301, 302, 303 and 307 Redirects.
-  * Meta-Refresh Redirects.
-  * HTTP Basic Auth protected links.
-* Black-list or white-list URLs based upon:
-  * URL scheme.
-  * Host name
-  * Port number
-  * Full link
-  * URL extension
-  * Optional `/robots.txt` support.
-* Provides callbacks for:
-  * Every visited Page.
-  * Every visited URL.
-  * Every visited URL that matches a specified pattern.
-  * Every origin and destination URI of a link.
-  * Every URL that failed to be visited.
-* Provides action methods to:
-  * Pause spidering.
-  * Skip processing of pages.
-  * Skip processing of links.
-* Restore the spidering queue and history from a previous session.
-* Custom User-Agent strings.
-* Custom proxy settings.
-* HTTPS support.
+- Follows:
+     - `a` tags.
+     - `iframe` tags.
+     - `frame` tags.
+     - Cookie protected links.
+     - HTTP 300, 301, 302, 303 and 307 Redirects.
+     - Meta-Refresh Redirects.
+     - HTTP Basic Auth protected links.
+- Black-list or white-list URLs based upon:
+     - URL scheme.
+     - Host name
+     - Port number
+     - Full link
+     - URL extension
+     - Optional `/robots.txt` support.
+- Provides callbacks for:
+     - Every visited Page.
+     - Every visited URL.
+     - Every visited URL that matches a specified pattern.
+     - Every origin and destination URI of a link.
+     - Every URL that failed to be visited.
+- Provides action methods to:
+     - Pause spidering.
+     - Skip processing of pages.
+     - Skip processing of links.
+- Restore the spidering queue and history from a previous session.
+- Custom User-Agent strings.
+- Custom proxy settings.
+- HTTPS support.
 
 ## Examples
 
@@ -240,8 +240,8 @@ end
 
 ## Requirements
 
-* [ruby] >= 2.0.0
-* [nokogiri] ~> 1.3
+- [ruby] >= 2.0.0
+- [nokogiri] ~> 1.3
 
 ## Install
 

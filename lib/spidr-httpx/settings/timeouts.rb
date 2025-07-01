@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Spidr
+module SpidrHttpx
   module Settings
     #
     # @since 0.6.0
