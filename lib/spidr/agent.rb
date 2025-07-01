@@ -15,6 +15,7 @@ require_relative 'spidr'
 require 'openssl'
 require 'net/http'
 require 'set'
+require 'httpx'
 
 module Spidr
   class Agent
@@ -711,7 +712,8 @@ module Spidr
       url = URI(url)
 
       prepare_request(url) do |session,path,headers|
-        new_page = Page.new(url,session.get(path,headers))
+        # new_page = Page.new(url,session.get(path,headers))
+        new_page = Page.new(url,HTTPX.get(url))
 
         # save any new cookies
         @cookies.from_page(new_page)

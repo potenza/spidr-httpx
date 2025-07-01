@@ -6,6 +6,7 @@ end
 
 gemspec
 
+gem 'httpx'
 gem 'robots', group: :robots
 
 group :development do
