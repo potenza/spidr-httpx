@@ -14,12 +14,10 @@ require_relative 'spidr'
 
 require 'openssl'
 require 'net/http'
-require 'set'
 require 'httpx'
 
 module Spidr
   class Agent
-
     include Settings::UserAgent
 
     # HTTP Host `Header` to use
@@ -212,44 +210,45 @@ module Spidr
     # @yieldparam [Agent] agent
     #   The newly created agent.
     #
-    def initialize(# header keyword arguments
-                   host_header:        nil,
-                   host_headers:       {},
-                   default_headers:    {},
-                   user_agent:         Spidr.user_agent,
-                   referer:            nil,
-                   # session cache keyword arguments
-                   proxy:              Spidr.proxy,
-                   open_timeout:       Spidr.open_timeout,
-                   ssl_timeout:        Spidr.ssl_timeout,
-                   read_timeout:       Spidr.read_timeout,
-                   continue_timeout:   Spidr.continue_timeout,
-                   keep_alive_timeout: Spidr.keep_alive_timeout,
-                   # spidering controls keyword arguments
-                   delay:     0,
-                   limit:     nil,
-                   max_depth: nil,
-                   # history keyword arguments
-                   queue:   nil,
-                   history: nil,
-                   # sanitizer keyword arguments
-                   strip_fragments: true,
-                   strip_query:     false,
-                   # filtering keyword arguments
-                   schemes:      self.class.default_schemes,
-                   host:         nil,
-                   hosts:        nil,
-                   ignore_hosts: nil,
-                   ports:        nil,
-                   ignore_ports: nil,
-                   links:        nil,
-                   ignore_links: nil,
-                   urls:         nil,
-                   ignore_urls:  nil,
-                   exts:         nil,
-                   ignore_exts:  nil,
-                   # robots keyword arguments
-                   robots:       Spidr.robots?)
+    def initialize( # header keyword arguments
+      host_header: nil,
+      host_headers:       {},
+      default_headers:    {},
+      user_agent:         Spidr.user_agent,
+      referer:            nil,
+      # session cache keyword arguments
+      proxy:              Spidr.proxy,
+      open_timeout:       Spidr.open_timeout,
+      ssl_timeout:        Spidr.ssl_timeout,
+      read_timeout:       Spidr.read_timeout,
+      continue_timeout:   Spidr.continue_timeout,
+      keep_alive_timeout: Spidr.keep_alive_timeout,
+      # spidering controls keyword arguments
+      delay:     0,
+      limit:     nil,
+      max_depth: nil,
+      # history keyword arguments
+      queue:   nil,
+      history: nil,
+      # sanitizer keyword arguments
+      strip_fragments: true,
+      strip_query:     false,
+      # filtering keyword arguments
+      schemes:      self.class.default_schemes,
+      host:         nil,
+      hosts:        nil,
+      ignore_hosts: nil,
+      ports:        nil,
+      ignore_ports: nil,
+      links:        nil,
+      ignore_links: nil,
+      urls:         nil,
+      ignore_urls:  nil,
+      exts:         nil,
+      ignore_exts:  nil,
+      # robots keyword arguments
+      robots:       Spidr.robots?
+    )
       @host_header  = host_header
       @host_headers = host_headers
 
@@ -259,11 +258,11 @@ module Spidr
       @referer    = referer
 
       @sessions   = SessionCache.new(
-        proxy:              proxy,
-        open_timeout:       open_timeout,
-        ssl_timeout:        ssl_timeout,
-        read_timeout:       read_timeout,
-        continue_timeout:   continue_timeout,
+        proxy: proxy,
+        open_timeout: open_timeout,
+        ssl_timeout: ssl_timeout,
+        read_timeout: read_timeout,
+        continue_timeout: continue_timeout,
         keep_alive_timeout: keep_alive_timeout
       )
       @cookies    = CookieJar.new
@@ -284,22 +283,22 @@ module Spidr
 
       initialize_sanitizers(
         strip_fragments: strip_fragments,
-        strip_query:     strip_query
+        strip_query: strip_query
       )
 
       initialize_filters(
-        schemes:      schemes,
-        host:         host,
-        hosts:        hosts,
+        schemes: schemes,
+        host: host,
+        hosts: hosts,
         ignore_hosts: ignore_hosts,
-        ports:        ports,
+        ports: ports,
         ignore_ports: ignore_ports,
-        links:        links,
+        links: links,
         ignore_links: ignore_links,
-        urls:         urls,
-        ignore_urls:  ignore_urls,
-        exts:         exts,
-        ignore_exts:  ignore_exts
+        urls: urls,
+        ignore_urls: ignore_urls,
+        exts: exts,
+        ignore_exts: ignore_exts
       )
       initialize_actions
       initialize_events
@@ -331,10 +330,10 @@ module Spidr
     # @see #initialize
     # @see #start_at
     #
-    def self.start_at(url,**kwargs,&block)
-      agent = new(**kwargs,&block)
+    def self.start_at(url, **kwargs, &block)
+      agent = new(**kwargs, &block)
       agent.start_at(url)
-      return agent
+      agent
     end
 
     #
@@ -358,12 +357,12 @@ module Spidr
     #
     # @see #initialize
     #
-    def self.site(url,**kwargs,&block)
+    def self.site(url, **kwargs, &block)
       url = URI(url)
 
       agent = new(host: url.host, **kwargs, &block)
       agent.start_at(url)
-      return agent
+      agent
     end
 
     #
@@ -387,10 +386,10 @@ module Spidr
     #
     # @see #initialize
     #
-    def self.host(name,**kwargs,&block)
+    def self.host(name, **kwargs, &block)
       agent = new(host: name, **kwargs, &block)
       agent.start_at(URI::HTTP.build(host: name, path: '/'))
-      return agent
+      agent
     end
 
     #
@@ -416,10 +415,10 @@ module Spidr
     #
     # @since 0.7.0
     #
-    def self.domain(name,**kwargs,&block)
+    def self.domain(name, **kwargs, &block)
       agent = new(host: /(^|\.)#{Regexp.escape(name)}$/, **kwargs, &block)
       agent.start_at(URI::HTTP.build(host: name, path: '/'))
-      return agent
+      agent
     end
 
     #
@@ -460,7 +459,7 @@ module Spidr
       @queue.clear
       @history.clear
       @failures.clear
-      return self
+      self
     end
 
     #
@@ -475,9 +474,9 @@ module Spidr
     # @yieldparam [Page] page
     #   A page which has been visited.
     #
-    def start_at(url,&block)
+    def start_at(url, &block)
       enqueue(url)
-      return run(&block)
+      run(&block)
     end
 
     #
@@ -493,9 +492,9 @@ module Spidr
     def run(&block)
       @running = true
 
-      until (@queue.empty? || paused? || limit_reached?)
+      until @queue.empty? || paused? || limit_reached?
         begin
-          visit_page(dequeue,&block)
+          visit_page(dequeue, &block)
         rescue Actions::Paused
           return self
         rescue Actions::Action
@@ -504,7 +503,7 @@ module Spidr
 
       @running = false
       @sessions.clear
-      return self
+      self
     end
 
     #
@@ -535,8 +534,6 @@ module Spidr
       new_history.each do |url|
         @history << URI(url)
       end
-
-      return @history
     end
 
     alias visited_urls history
@@ -592,8 +589,6 @@ module Spidr
       new_failures.each do |url|
         @failures << URI(url)
       end
-
-      return @failures
     end
 
     #
@@ -629,8 +624,6 @@ module Spidr
       new_queue.each do |url|
         @queue << URI(url)
       end
-
-      return @queue
     end
 
     #
@@ -656,16 +649,16 @@ module Spidr
     # @return [Boolean]
     #   Specifies whether the URL was enqueued, or ignored.
     #
-    def enqueue(url,level=0)
+    def enqueue(url, level = 0)
       url = sanitize_url(url)
 
-      if (!queued?(url) && visit?(url))
+      if !queued?(url) && visit?(url)
         link = url.to_s
 
         begin
           @every_url_blocks.each { |url_block| url_block.call(url) }
 
-          @every_url_like_blocks.each do |pattern,url_blocks|
+          @every_url_like_blocks.each do |pattern, url_blocks|
             match = case pattern
                     when Regexp
                       link =~ pattern
@@ -673,12 +666,10 @@ module Spidr
                       (pattern == link) || (pattern == url)
                     end
 
-            if match
-              url_blocks.each { |url_block| url_block.call(url) }
-            end
+            url_blocks.each { |url_block| url_block.call(url) } if match
           end
-        rescue Actions::Paused => action
-          raise(action)
+        rescue Actions::Paused => e
+          raise(e)
         rescue Actions::SkipLink
           return false
         rescue Actions::Action
@@ -689,7 +680,7 @@ module Spidr
         return true
       end
 
-      return false
+      false
     end
 
     #
@@ -712,8 +703,15 @@ module Spidr
       url = URI(url)
 
       prepare_request(url) do |session, path, headers|
-        new_page = Page.new(url, session.get(path, headers))
-        # new_page = Page.new(url,HTTPX.get(url))
+        # new_page = Page.new(url, session.get(path, headers))
+
+        httpx_response = HTTPX.get(url)
+        response = OpenStruct.new(
+          headers: httpx_response.headers,
+          body: httpx_response.body,
+          status: httpx_response.status
+        )
+        new_page = Page.new(url, response)
 
         binding.break
 
@@ -746,11 +744,11 @@ module Spidr
     #
     # @since 0.2.2
     #
-    def post_page(url,post_data='')
+    def post_page(url, post_data = '')
       url = URI(url)
 
-      prepare_request(url) do |session,path,headers|
-        new_page = Page.new(url,session.post(path,post_data,headers))
+      prepare_request(url) do |session, path, headers|
+        new_page = Page.new(url, session.post(path, post_data, headers))
 
         # save any new cookies
         @cookies.from_page(new_page)
@@ -787,8 +785,8 @@ module Spidr
           @every_page_blocks.each { |page_block| page_block.call(page) }
 
           yield page if block_given?
-        rescue Actions::Paused => action
-          raise(action)
+        rescue Actions::Paused => e
+          raise(e)
         rescue Actions::SkipPage
           return nil
         rescue Actions::Action
@@ -797,18 +795,16 @@ module Spidr
         page.each_url do |next_url|
           begin
             @every_link_blocks.each do |link_block|
-              link_block.call(page.url,next_url)
+              link_block.call(page.url, next_url)
             end
-          rescue Actions::Paused => action
-            raise(action)
+          rescue Actions::Paused => e
+            raise(e)
           rescue Actions::SkipLink
             next
           rescue Actions::Action
           end
 
-          if (@max_depth.nil? || @max_depth > @levels[url])
-            enqueue(next_url,@levels[url] + 1)
-          end
+          enqueue(next_url, @levels[url] + 1) if @max_depth.nil? || @max_depth > @levels[url]
         end
       end
     end
@@ -821,7 +817,7 @@ module Spidr
     #   the `queue` of the agent.
     #
     def to_hash
-      {history: @history, queue: @queue}
+      { history: @history, queue: @queue }
     end
 
     protected
@@ -842,7 +838,7 @@ module Spidr
       headers = @default_headers.dup
 
       unless @host_headers.empty?
-        @host_headers.each do |name,header|
+        @host_headers.each do |name, header|
           if url.host.match(name)
             headers['Host'] = header
             break
@@ -862,7 +858,7 @@ module Spidr
         headers['Cookie'] = header_cookies
       end
 
-      return headers
+      headers
     end
 
     #
@@ -886,11 +882,11 @@ module Spidr
     #
     # @since 0.2.2
     #
-    def prepare_request(url,&block)
-      path = unless url.path.empty?
-               url.path
-             else
+    def prepare_request(url)
+      path = if url.path.empty?
                '/'
+             else
+               url.path
              end
 
       # append the URL query to the path
@@ -913,7 +909,7 @@ module Spidr
         @sessions.kill!(url)
 
         failed(url)
-        return nil
+        nil
       end
     end
 
@@ -949,13 +945,13 @@ module Spidr
     #
     def visit?(url)
       !visited?(url) &&
-       visit_scheme?(url.scheme) &&
-       visit_host?(url.host) &&
-       visit_port?(url.port) &&
-       visit_link?(url.to_s) &&
-       visit_url?(url) &&
-       visit_ext?(url.path) &&
-       robot_allowed?(url.to_s)
+        visit_scheme?(url.scheme) &&
+        visit_host?(url.host) &&
+        visit_port?(url.port) &&
+        visit_link?(url.to_s) &&
+        visit_url?(url) &&
+        visit_ext?(url.path) &&
+        robot_allowed?(url.to_s)
     end
 
     #
@@ -967,8 +963,7 @@ module Spidr
     def failed(url)
       @failures << url
       @every_failed_url_blocks.each { |fail_block| fail_block.call(url) }
-      return true
+      true
     end
-
   end
 end
