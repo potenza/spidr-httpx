@@ -706,15 +706,13 @@ module Spidr
       prepare_request(url) do |session, path, headers|
         # new_page = Page.new(url, session.get(path, headers))
 
+        page_session = session.get(path, headers)
         httpx_response = HTTPX.get(url)
-        response = OpenStruct.new(
-          headers: httpx_response.headers,
-          body: httpx_response.body,
-          status: httpx_response.status
-        )
-        new_page = Page.new(url, response)
+        page_session.body = httpx_response.body.to_s
 
-        binding.break
+        new_page = Page.new(url, page_session)
+
+        # binding.break
 
         # save any new cookies
         @cookies.from_page(new_page)
