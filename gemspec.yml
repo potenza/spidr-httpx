@@ -1,4 +1,4 @@
-name: spidr
+name: spidr-httpx
 summary: A versatile Ruby web spidering library
 description:
   Spidr is a versatile Ruby web spidering library that can spider a site,
@@ -13,10 +13,10 @@ has_yard: true
 
 metadata:
   documentation_uri: https://rubydoc.info/gems/spidr
-  source_code_uri:   https://github.com/postmodern/spidr.rb
-  bug_tracker_uri:   https://github.com/postmodern/spidr.rb/issues
-  changelog_uri:     https://github.com/postmodern/spidr.rb/blob/master/ChangeLog.md
-  rubygems_mfa_required: 'true'
+  source_code_uri: https://github.com/postmodern/spidr.rb
+  bug_tracker_uri: https://github.com/postmodern/spidr.rb/issues
+  changelog_uri: https://github.com/postmodern/spidr.rb/blob/master/ChangeLog.md
+  rubygems_mfa_required: "true"
 
 required_ruby_version: ">= 2.0.0"
 
