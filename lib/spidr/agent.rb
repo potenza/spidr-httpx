@@ -15,6 +15,7 @@ require_relative 'spidr'
 require 'openssl'
 require 'net/http'
 require 'httpx'
+require 'ostruct'
 
 module Spidr
   class Agent
