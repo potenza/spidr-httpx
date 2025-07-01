@@ -711,9 +711,11 @@ module Spidr
     def get_page(url)
       url = URI(url)
 
-      prepare_request(url) do |session,path,headers|
-        # new_page = Page.new(url,session.get(path,headers))
-        new_page = Page.new(url,HTTPX.get(url))
+      prepare_request(url) do |session, path, headers|
+        new_page = Page.new(url, session.get(path, headers))
+        # new_page = Page.new(url,HTTPX.get(url))
+
+        binding.break
 
         # save any new cookies
         @cookies.from_page(new_page)
