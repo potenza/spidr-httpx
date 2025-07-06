@@ -5,14 +5,14 @@ begin
 rescue LoadError
 end
 
-module Spidr
+module SpidrHttpx
   class Agent
     #
     # Initializes the robots filter.
     #
     def initialize_robots
       unless Object.const_defined?(:Robots)
-        raise(ArgumentError,":robots option given but unable to require 'robots' gem")
+        raise(ArgumentError, ":robots option given but unable to require 'robots' gem")
       end
 
       @robots = Robots.new(@user_agent)

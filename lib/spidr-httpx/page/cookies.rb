@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-require 'set'
-
-module Spidr
+module SpidrHttpx
   class Page
     # Reserved names used within Cookie strings
     RESERVED_COOKIE_NAMES = /^(?:Path|Expires|Domain|Secure|HTTPOnly)$/i
@@ -30,7 +28,7 @@ module Spidr
     # @since 0.2.2
     #
     def cookies
-      (@response.get_fields('Set-Cookie') || [])
+      @response.get_fields('Set-Cookie') || []
     end
 
     #
@@ -48,15 +46,13 @@ module Spidr
         value.split(';').each do |param|
           param.strip!
 
-          name, value = param.split('=',2)
+          name, value = param.split('=', 2)
 
-          unless name =~ RESERVED_COOKIE_NAMES
-            params[name] = (value || '')
-          end
+          params[name] = (value || '') unless name =~ RESERVED_COOKIE_NAMES
         end
       end
 
-      return params
+      params
     end
   end
 end

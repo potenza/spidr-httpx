@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Spidr
+module SpidrHttpx
   class Agent
     #
     # Pass each URL from each page visited to the given block.
@@ -13,7 +13,7 @@ module Spidr
     #
     def every_url(&block)
       @every_url_blocks << block
-      return self
+      self
     end
 
     #
@@ -27,7 +27,7 @@ module Spidr
     #
     def every_failed_url(&block)
       @every_failed_url_blocks << block
-      return self
+      self
     end
 
     #
@@ -45,16 +45,16 @@ module Spidr
     #
     # @since 0.3.2
     #
-    def every_url_like(pattern,&block)
+    def every_url_like(pattern, &block)
       @every_url_like_blocks[pattern] << block
-      return self
+      self
     end
 
     #
     # @see #every_url_like
     #
-    def urls_like(pattern,&block)
-      every_url_like(pattern,&block)
+    def urls_like(pattern, &block)
+      every_url_like(pattern, &block)
     end
 
     #
@@ -82,7 +82,7 @@ module Spidr
     #
     def every_page(&block)
       @every_page_blocks << block
-      return self
+      self
     end
 
     #
@@ -96,7 +96,7 @@ module Spidr
     #
     def every_ok_page
       every_page do |page|
-        yield page if (block_given? && page.ok?)
+        yield page if block_given? && page.ok?
       end
     end
 
@@ -111,7 +111,7 @@ module Spidr
     #
     def every_redirect_page
       every_page do |page|
-        yield page if (block_given? && page.redirect?)
+        yield page if block_given? && page.redirect?
       end
     end
 
@@ -126,7 +126,7 @@ module Spidr
     #
     def every_timedout_page
       every_page do |page|
-        yield page if (block_given? && page.timedout?)
+        yield page if block_given? && page.timedout?
       end
     end
 
@@ -141,7 +141,7 @@ module Spidr
     #
     def every_bad_request_page
       every_page do |page|
-        yield page if (block_given? && page.bad_request?)
+        yield page if block_given? && page.bad_request?
       end
     end
 
@@ -156,7 +156,7 @@ module Spidr
     #
     def every_unauthorized_page
       every_page do |page|
-        yield page if (block_given? && page.unauthorized?)
+        yield page if block_given? && page.unauthorized?
       end
     end
 
@@ -171,7 +171,7 @@ module Spidr
     #
     def every_forbidden_page
       every_page do |page|
-        yield page if (block_given? && page.forbidden?)
+        yield page if block_given? && page.forbidden?
       end
     end
 
@@ -186,7 +186,7 @@ module Spidr
     #
     def every_missing_page
       every_page do |page|
-        yield page if (block_given? && page.missing?)
+        yield page if block_given? && page.missing?
       end
     end
 
@@ -202,7 +202,7 @@ module Spidr
     #
     def every_internal_server_error_page
       every_page do |page|
-        yield page if (block_given? && page.had_internal_server_error?)
+        yield page if block_given? && page.had_internal_server_error?
       end
     end
 
@@ -217,7 +217,7 @@ module Spidr
     #
     def every_txt_page
       every_page do |page|
-        yield page if (block_given? && page.txt?)
+        yield page if block_given? && page.txt?
       end
     end
 
@@ -232,7 +232,7 @@ module Spidr
     #
     def every_html_page
       every_page do |page|
-        yield page if (block_given? && page.html?)
+        yield page if block_given? && page.html?
       end
     end
 
@@ -247,7 +247,7 @@ module Spidr
     #
     def every_xml_page
       every_page do |page|
-        yield page if (block_given? && page.xml?)
+        yield page if block_given? && page.xml?
       end
     end
 
@@ -263,7 +263,7 @@ module Spidr
     #
     def every_xsl_page
       every_page do |page|
-        yield page if (block_given? && page.xsl?)
+        yield page if block_given? && page.xsl?
       end
     end
 
@@ -282,10 +282,8 @@ module Spidr
     #
     def every_doc
       every_page do |page|
-        if block_given?
-          if (doc = page.doc)
-            yield doc
-          end
+        if block_given? && (doc = page.doc)
+          yield doc
         end
       end
     end
@@ -303,10 +301,8 @@ module Spidr
     #
     def every_html_doc
       every_page do |page|
-        if (block_given? && page.html?)
-          if (doc = page.doc)
-            yield doc
-          end
+        if block_given? && page.html? && (doc = page.doc)
+          yield doc
         end
       end
     end
@@ -324,10 +320,8 @@ module Spidr
     #
     def every_xml_doc
       every_page do |page|
-        if (block_given? && page.xml?)
-          if (doc = page.doc)
-            yield doc
-          end
+        if block_given? && page.xml? && (doc = page.doc)
+          yield doc
         end
       end
     end
@@ -346,10 +340,8 @@ module Spidr
     #
     def every_xsl_doc
       every_page do |page|
-        if (block_given? && page.xsl?)
-          if (doc = page.doc)
-            yield doc
-          end
+        if block_given? && page.xsl? && (doc = page.doc)
+          yield doc
         end
       end
     end
@@ -367,10 +359,8 @@ module Spidr
     #
     def every_rss_doc
       every_page do |page|
-        if (block_given? && page.rss?)
-          if (doc = page.doc)
-            yield doc
-          end
+        if block_given? && page.rss? && (doc = page.doc)
+          yield doc
         end
       end
     end
@@ -388,10 +378,8 @@ module Spidr
     #
     def every_atom_doc
       every_page do |page|
-        if (block_given? && page.atom?)
-          if (doc = page.doc)
-            yield doc
-          end
+        if block_given? && page.atom? && (doc = page.doc)
+          yield doc
         end
       end
     end
@@ -407,7 +395,7 @@ module Spidr
     #
     def every_javascript_page
       every_page do |page|
-        yield page if (block_given? && page.javascript?)
+        yield page if block_given? && page.javascript?
       end
     end
 
@@ -422,7 +410,7 @@ module Spidr
     #
     def every_css_page
       every_page do |page|
-        yield page if (block_given? && page.css?)
+        yield page if block_given? && page.css?
       end
     end
 
@@ -437,7 +425,7 @@ module Spidr
     #
     def every_rss_page
       every_page do |page|
-        yield page if (block_given? && page.rss?)
+        yield page if block_given? && page.rss?
       end
     end
 
@@ -452,7 +440,7 @@ module Spidr
     #
     def every_atom_page
       every_page do |page|
-        yield page if (block_given? && page.atom?)
+        yield page if block_given? && page.atom?
       end
     end
 
@@ -467,7 +455,7 @@ module Spidr
     #
     def every_ms_word_page
       every_page do |page|
-        yield page if (block_given? && page.ms_word?)
+        yield page if block_given? && page.ms_word?
       end
     end
 
@@ -482,7 +470,7 @@ module Spidr
     #
     def every_pdf_page
       every_page do |page|
-        yield page if (block_given? && page.pdf?)
+        yield page if block_given? && page.pdf?
       end
     end
 
@@ -497,7 +485,7 @@ module Spidr
     #
     def every_zip_page
       every_page do |page|
-        yield page if (block_given? && page.zip?)
+        yield page if block_given? && page.zip?
       end
     end
 
@@ -517,7 +505,7 @@ module Spidr
     #
     def every_link(&block)
       @every_link_blocks << block
-      return self
+      self
     end
 
     protected
@@ -525,11 +513,10 @@ module Spidr
     def initialize_events
       @every_url_blocks        = []
       @every_failed_url_blocks = []
-      @every_url_like_blocks   = Hash.new { |hash,key| hash[key] = [] }
+      @every_url_like_blocks   = Hash.new { |hash, key| hash[key] = [] }
 
       @every_page_blocks = []
       @every_link_blocks = []
     end
-
   end
 end

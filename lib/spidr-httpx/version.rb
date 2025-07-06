@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Spidr
-  # Spidr version
+module SpidrHttpx
+  # SpidrHttpx version
   VERSION = '0.7.2'
 end

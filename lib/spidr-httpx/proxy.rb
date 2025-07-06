@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
-module Spidr
+module SpidrHttpx
   #
   # @since 0.6.0
   #
   class Proxy < Struct.new(:host, :port, :user, :password)
-
     # Default port to use.
     DEFAULT_PORT = 8080
 
@@ -25,7 +24,7 @@ module Spidr
     #   The password to authenticate with.
     #
     def initialize(host: nil, port: DEFAULT_PORT, user: nil, password: nil)
-      super(host,port,user,password)
+      super(host, port, user, password)
     end
 
     #
@@ -45,6 +44,5 @@ module Spidr
     def disabled?
       host.nil?
     end
-
   end
 end

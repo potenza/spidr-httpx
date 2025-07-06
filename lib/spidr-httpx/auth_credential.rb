@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
-module Spidr
+module SpidrHttpx
   #
   # Represents HTTP Authentication credentials for a website.
   #
   class AuthCredential
-
     # The username
     attr_reader :username
 
@@ -21,10 +20,9 @@ module Spidr
     # @param [String] password
     #   The password for the credential.
     #
-    def initialize(username,password)
+    def initialize(username, password)
       @username = username
       @password = password
     end
-
   end
 end

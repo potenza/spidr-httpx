@@ -2,14 +2,11 @@
 
 require_relative 'page'
 
-require 'set'
-
-module Spidr
+module SpidrHttpx
   #
   # Stores HTTP Cookies organized by host-name.
   #
   class CookieJar
-
     include Enumerable
 
     #
@@ -72,19 +69,19 @@ module Spidr
     #
     # @since 0.2.2
     #
-    def []=(host,cookies)
+    def []=(host, cookies)
       collected = self[host]
 
-      cookies.each do |key,value|
-        if collected[key] != value
-          collected.merge!(cookies)
-          @dirty << host
+      cookies.each do |key, value|
+        next unless collected[key] != value
 
-          break
-        end
+        collected.merge!(cookies)
+        @dirty << host
+
+        break
       end
 
-      return cookies
+      cookies
     end
 
     #
@@ -106,7 +103,7 @@ module Spidr
         return true
       end
 
-      return false
+      false
     end
 
     #
@@ -124,7 +121,7 @@ module Spidr
       if @dirty.include?(host)
         values = []
 
-        cookies_for_host(host).each do |name,value|
+        cookies_for_host(host).each do |name, value|
           values << "#{name}=#{value}"
         end
 
@@ -132,7 +129,7 @@ module Spidr
         @dirty.delete(host)
       end
 
-      return @cookies[host]
+      @cookies[host]
     end
 
     #
@@ -148,24 +145,22 @@ module Spidr
     # @since 0.2.7
     #
     def cookies_for_host(host)
-      host_cookies = (@params[host] || {})
+      host_cookies = @params[host] || {}
       sub_domains  = host.split('.')
 
       while sub_domains.length > 2
         sub_domains.shift
 
-        if (parent_cookies = @params[sub_domains.join('.')])
-          parent_cookies.each do |name,value|
-            # copy in the parent cookies, only if they haven't been
-            # overridden yet.
-            unless host_cookies.has_key?(name)
-              host_cookies[name] = value
-            end
-          end
+        next unless (parent_cookies = @params[sub_domains.join('.')])
+
+        parent_cookies.each do |name, value|
+          # copy in the parent cookies, only if they haven't been
+          # overridden yet.
+          host_cookies[name] = value unless host_cookies.has_key?(name)
         end
       end
 
-      return host_cookies
+      host_cookies
     end
 
     #
@@ -178,7 +173,7 @@ module Spidr
 
       @dirty.clear
       @cookies.clear
-      return self
+      self
     end
 
     #
@@ -199,6 +194,5 @@ module Spidr
     def inspect
       "#<#{self.class}: #{@params.inspect}>"
     end
-
   end
 end

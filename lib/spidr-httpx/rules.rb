@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
-module Spidr
+module SpidrHttpx
   #
   # The {Rules} class represents collections of acceptance and rejection
   # rules, which are used to filter data.
   #
   class Rules
-
     # Accept rules
     attr_reader :accept
 
@@ -38,10 +37,10 @@ module Spidr
     #   acceptance patterns.
     #
     def accept?(data)
-      unless @accept.empty?
-        @accept.any? { |rule| test_data(data,rule) }
+      if @accept.empty?
+        !@reject.any? { |rule| test_data(data, rule) }
       else
-        !@reject.any? { |rule| test_data(data,rule) }
+        @accept.any? { |rule| test_data(data, rule) }
       end
     end
 
@@ -64,15 +63,14 @@ module Spidr
     # @return [Boolean]
     #   Specifies whether the given data matched the pattern.
     #
-    def test_data(data,rule)
-      if rule.kind_of?(Proc)
+    def test_data(data, rule)
+      if rule.is_a?(Proc)
         rule.call(data) == true
-      elsif rule.kind_of?(Regexp)
-        !((data.to_s =~ rule).nil?)
+      elsif rule.is_a?(Regexp)
+        !(data.to_s =~ rule).nil?
       else
         data == rule
       end
     end
-
   end
 end
